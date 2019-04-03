@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../src/element.js"></script>
+  <script src="../src/listdiff.js"></script>
+  <script src="../src/diff.js"></script>
+  <script src="../src/patch.js"></script>
+  <script>
+    var test1 = createElement('div', { id: 'test' }, ['test'])
+    var test2 = new Element('div', { id: '11' }, ['test5', 'test4'])
+
+    var root = test1.render();
+  
+    document.getElementById('root').appendChild(root)
+
+    let pathchs = diff(test1, test2)
+    patch(root, pathchs)
+  </script>
+</body>
+
+</html>
