@@ -39,7 +39,7 @@ function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
   }
 
   var leftNode = null;
-  var currentNodeIndex = index;
+  var currentNodeIndex = index; // 简单的说就是深度优先遍历的第几个元素
   oldChildren.forEach(function (child, i) {
     var newChild = newChildren[i];
     currentNodeIndex = (leftNode && leftNode.count) ? currentNodeIndex + leftNode.count + 1 : currentNodeIndex + 1;
