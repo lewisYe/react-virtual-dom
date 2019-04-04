@@ -32,7 +32,7 @@ function dfswalk(oldNode, newNode, index, patches) {
 
 function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
   var diffs = listDiff(oldChildren, newChildren, 'key'); // 在 listdiff 文件
-  newChildren = diffs.children;
+  newChildren = diffs.children;  //得到列表对比后的节点
   if (diffs.moves.length) {
     var reorderPatch = { type: 'REORDER', moves: diffs.moves }
     currentPatch.push(reorderPatch)
