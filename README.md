@@ -199,6 +199,30 @@ a b c h d f g i j
 
 完整代码[listdiff.js](https://github.com/lewisYe/react-virtual-dom/blob/master/src/listdiff.js)
 
+### 遍历所有子节点
+
+```
+function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
+  var diffs = listDiff(oldChildren, newChildren, 'key'); // 在 listdiff 文件
+  newChildren = diffs.children;  //得到列表对比后的节点列表
+  if (diffs.moves.length) {
+    var reorderPatch = { type: 'REORDER', moves: diffs.moves }
+    currentPatch.push(reorderPatch)
+  }
+
+  var leftNode = null;
+  var currentNodeIndex = index; // 简单的说就是深度优先遍历的第几个元素
+  oldChildren.forEach(function (child, i) {
+    var newChild = newChildren[i];
+    currentNodeIndex = (leftNode && leftNode.count) ? currentNodeIndex + leftNode.count + 1 : currentNodeIndex + 1;
+    dfswalk(child, newChild, currentNodeIndex, patches);
+    leftNode = child
+  })
+}
+```
+
+完整代码[diff.js](https://github.com/lewisYe/react-virtual-dom/blob/master/src/diff.js)
+
 ## 步骤三：差异渲染到真实DOM
 
 经过步骤二我们已经得到了所有的差异`patches`对象，这时我们只需要遍历DOM树，将对应节点的差异局部更新就可以了。
@@ -255,30 +279,6 @@ function applyPatches(node, currentPatches) {
 ```
 
 完整代码可见 [patch.js](https://github.com/lewisYe/react-virtual-dom/blob/master/src/patch.js)。
-
-### 遍历所有子节点
-
-```
-function diffChildren(oldChildren, newChildren, index, patches, currentPatch) {
-  var diffs = listDiff(oldChildren, newChildren, 'key'); // 在 listdiff 文件
-  newChildren = diffs.children;  //得到列表对比后的节点列表
-  if (diffs.moves.length) {
-    var reorderPatch = { type: 'REORDER', moves: diffs.moves }
-    currentPatch.push(reorderPatch)
-  }
-
-  var leftNode = null;
-  var currentNodeIndex = index; // 简单的说就是深度优先遍历的第几个元素
-  oldChildren.forEach(function (child, i) {
-    var newChild = newChildren[i];
-    currentNodeIndex = (leftNode && leftNode.count) ? currentNodeIndex + leftNode.count + 1 : currentNodeIndex + 1;
-    dfswalk(child, newChild, currentNodeIndex, patches);
-    leftNode = child
-  })
-}
-```
-
-完整代码[diff.js](https://github.com/lewisYe/react-virtual-dom/blob/master/src/diff.js)
 
 # 总结
 
